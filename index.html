@@ -1,42 +1,160 @@
 <!DOCTYPE html>
 <html lang="fa">
 <head>
-  <meta charset="UTF-8">
-  <title>Game Center</title>
+<meta charset="UTF-8">
+<title>Game & Tools Center</title>
+
+<style>
+body{
+  font-family:tahoma;
+  margin:0;
+  background:linear-gradient(135deg,#141e30,#243b55);
+  color:white;
+  text-align:center;
+}
+
+h1{margin-top:20px;}
+
+.menu button{
+  padding:10px 15px;
+  margin:5px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  background:#00d4ff;
+  color:black;
+  font-weight:bold;
+}
+
+.card{
+  background:rgba(255,255,255,0.1);
+  margin:20px auto;
+  padding:20px;
+  border-radius:15px;
+  width:300px;
+}
+
+input, button{
+  padding:10px;
+  margin:5px;
+  border-radius:10px;
+  border:none;
+}
+
+button:hover{
+  opacity:0.8;
+}
+</style>
 </head>
-<body style="text-align:center;font-family:tahoma">
 
-  <h1>🎮 Game Center</h1>
+<body>
 
-  <button onclick="play('سنگ')">سنگ</button>
-  <button onclick="play('کاغذ')">کاغذ</button>
-  <button onclick="play('قیچی')">قیچی</button>
+<h1>🎮 Game & Tools Center</h1>
 
-  <p id="result"></p>
+<div class="menu">
+  <button onclick="show('rps')">سنگ کاغذ قیچی</button>
+  <button onclick="show('guess')">حدس عدد</button>
+  <button onclick="show('calc')">ماشین حساب</button>
+  <button onclick="show('trans')">ترجمه</button>
+</div>
 
-  <script>
-    function play(user){
-      let choices = ["سنگ","کاغذ","قیچی"];
-      let bot = choices[Math.floor(Math.random()*3)];
+<!-- ================= RPS ================= -->
+<div id="rps" class="card" style="display:none;">
+<h3>سنگ کاغذ قیچی</h3>
+<button onclick="play('سنگ')">سنگ</button>
+<button onclick="play('کاغذ')">کاغذ</button>
+<button onclick="play('قیچی')">قیچی</button>
+<p id="rpsResult"></p>
+</div>
 
-      let result = "";
+<!-- ================= GUESS ================= -->
+<div id="guess" class="card" style="display:none;">
+<h3>حدس عدد (1 تا 5)</h3>
+<input id="gnum" type="number" min="1" max="5">
+<button onclick="guess()">حدس بزن</button>
+<p id="guessResult"></p>
+</div>
 
-      if(user === bot){
-        result = "مساوی 😐 منم " + bot;
-      }
-      else if(
-        (user==="سنگ" && bot==="قیچی") ||
-        (user==="کاغذ" && bot==="سنگ") ||
-        (user==="قیچی" && bot==="کاغذ")
-      ){
-        result = "بردی 🎉 من " + bot;
-      } else {
-        result = "باختی 😄 من " + bot;
-      }
+<!-- ================= CALC ================= -->
+<div id="calc" class="card" style="display:none;">
+<h3>ماشین حساب</h3>
+<input id="expr" placeholder="مثال: 2+2*5">
+<button onclick="calc()">محاسبه</button>
+<p id="calcResult"></p>
+</div>
 
-      document.getElementById("result").innerText = result;
-    }
-  </script>
+<!-- ================= TRANSLATE ================= -->
+<div id="trans" class="card" style="display:none;">
+<h3>ترجمه ساده (EN ⇄ FA)</h3>
+<input id="text" placeholder="hello / سلام">
+<button onclick="translateText()">ترجمه</button>
+<p id="transResult"></p>
+</div>
+
+<script>
+
+// ===== MENU =====
+function show(id){
+  document.querySelectorAll('.card').forEach(c=>c.style.display='none');
+  document.getElementById(id).style.display='block';
+}
+
+// ===== RPS =====
+function play(user){
+  let choices=["سنگ","کاغذ","قیچی"];
+  let bot=choices[Math.floor(Math.random()*3)];
+
+  let res="";
+  if(user===bot) res="مساوی 😐";
+  else if(
+    (user==="سنگ"&&bot==="قیچی")||
+    (user==="کاغذ"&&bot==="سنگ")||
+    (user==="قیچی"&&bot==="کاغذ")
+  ) res="بردی 🎉";
+  else res="باختی 😄";
+
+  document.getElementById("rpsResult").innerText = res+" (Bot: "+bot+")";
+}
+
+// ===== GUESS =====
+function guess(){
+  let n=parseInt(document.getElementById("gnum").value);
+  let bot=Math.floor(Math.random()*5)+1;
+
+  if(n===bot)
+    document.getElementById("guessResult").innerText="درست 🎉";
+  else
+    document.getElementById("guessResult").innerText="اشتباه 😄 عدد "+bot;
+}
+
+// ===== CALC =====
+function calc(){
+  let expr=document.getElementById("expr").value;
+  try{
+    document.getElementById("calcResult").innerText=eval(expr);
+  }catch{
+    document.getElementById("calcResult").innerText="خطا ❌";
+  }
+}
+
+// ===== SIMPLE TRANSLATE =====
+function translateText(){
+  let t=document.getElementById("text").value.toLowerCase();
+
+  let dict={
+    "hello":"سلام",
+    "hi":"سلام",
+    "how are you":"حالت چطوره",
+    "bye":"خداحافظ",
+    "سلام":"hello",
+    "خداحافظ":"bye"
+  };
+
+  document.getElementById("transResult").innerText =
+    dict[t] || "ترجمه پیدا نشد ❌";
+}
+
+</script>
 
 </body>
 </html>
