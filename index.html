@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>Game Center</title>
+</head>
+<body style="text-align:center;font-family:tahoma">
+
+  <h1>🎮 Game Center</h1>
+
+  <button onclick="play('سنگ')">سنگ</button>
+  <button onclick="play('کاغذ')">کاغذ</button>
+  <button onclick="play('قیچی')">قیچی</button>
+
+  <p id="result"></p>
+
+  <script>
+    function play(user){
+      let choices = ["سنگ","کاغذ","قیچی"];
+      let bot = choices[Math.floor(Math.random()*3)];
+
+      let result = "";
+
+      if(user === bot){
+        result = "مساوی 😐 منم " + bot;
+      }
+      else if(
+        (user==="سنگ" && bot==="قیچی") ||
+        (user==="کاغذ" && bot==="سنگ") ||
+        (user==="قیچی" && bot==="کاغذ")
+      ){
+        result = "بردی 🎉 من " + bot;
+      } else {
+        result = "باختی 😄 من " + bot;
+      }
+
+      document.getElementById("result").innerText = result;
+    }
+  </script>
+
+</body>
+</html>
